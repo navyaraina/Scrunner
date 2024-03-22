@@ -6,6 +6,29 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject spawnPoint;
     [SerializeField] List<GameObject> prefabsToSpawn;
+    [SerializeField] List <GameObject> obstaclesSpawn;
+
+
+    private float timer = 0.0f;
+
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer == Random.Range(5.0f,20.0f))
+        {
+            int num = Random.Range(0, obstaclesSpawn.Count);
+            GameObject obj = obstaclesSpawn[num];
+            Instantiate(obj, new Vector3(-1.08f, 0.75f, 4.4f), Quaternion.identity);
+
+            timer = 0.0f;
+        }
+
+        if (timer == Random.Range(1.0f, 5.0f))
+        {
+
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {

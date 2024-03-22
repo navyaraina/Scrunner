@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Windows.Speech;
 
 
+
 public class VoiceInput : MonoBehaviour
 {
     // Voice command vars
@@ -15,6 +16,8 @@ public class VoiceInput : MonoBehaviour
     public Rigidbody rb;
     public Vector3 scaleChange, originalScale;
 
+    //public Animator animator;
+
     [SerializeField] GameObject lane1Cube;
     [SerializeField] GameObject lane2Cube;
     [SerializeField] GameObject lane3Cube;
@@ -23,7 +26,8 @@ public class VoiceInput : MonoBehaviour
     int targetIndex;
     public float forceMag;
 
-    private IEnumerator coroutine;
+    public anim an;
+
 
     void Start()
     {
@@ -32,7 +36,8 @@ public class VoiceInput : MonoBehaviour
         keyActs.Add("jump", Jump);
         keyActs.Add("write", Right);
         keyActs.Add("right", Right);
-        keyActs.Add("slide", Slide);
+        keyActs.Add("crawl", Slide);
+        keyActs.Add("center", Center);
 
 
         recognizer = new KeywordRecognizer(keyActs.Keys.ToArray(), ConfidenceLevel.Low);
@@ -50,17 +55,27 @@ public class VoiceInput : MonoBehaviour
         scaleChange = new Vector3(0.5f, 0.5f, 1f);
         originalScale=new Vector3(1f,1f, 1f);  
 
+  
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
         recognizer.OnPhraseRecognized += OnKeywordsRecognized;
-
+        
     }
 
+    void Center()
+    {
+        targetIndex = 1;
+        Debug.Log(lanePos[1]);
+
+        currentLaneIndex = targetIndex;
+
+        var step = 500f * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, lanePos[targetIndex], step);
+    }
     void Left()
     {
         if (currentLaneIndex != 0)
@@ -92,19 +107,22 @@ public class VoiceInput : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, lanePos[targetIndex], step);
     }
 
-    void Jump() 
+    public void Jump() 
     {
         rb.AddForce(Vector3.up * forceMag);
+        Debug.Log(rb);
+
+        an.jump();
+        Debug.Log("jumping");
+        StartCoroutine(Example());
+
     }
 
-    void Slide()
+    public void Slide()    
     {
-        rb.transform.localScale = scaleChange;
-
-        coroutine = (IEnumerator)Wait();
-        StartCoroutine(coroutine);
-
-        rb.transform.localScale=originalScale;
+        an.slide();
+        Debug.Log("crawling");
+        StartCoroutine(Example());
     }
 
     void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
@@ -112,8 +130,10 @@ public class VoiceInput : MonoBehaviour
         Debug.Log("Command: " + args.text);
         keyActs[args.text].Invoke();
     }
-    private IEnumerable Wait()
+    IEnumerator Example()
     {
-        yield return new WaitForSeconds(18);
+        yield return new WaitForSecondsRealtime(2);
+        Debug.Log("Wait");
+        an.running();
     }
 }
