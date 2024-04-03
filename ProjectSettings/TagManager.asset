@@ -7,6 +7,9 @@ TagManager:
   - obstacle
   - border
   - barrier
+  - env
+  - gems
+  - trigger
   layers:
   - Default
   - TransparentFX

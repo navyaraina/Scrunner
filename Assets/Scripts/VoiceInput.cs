@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
+using UnityEngine.UIElements;
 
 
 
@@ -21,10 +22,14 @@ public class VoiceInput : MonoBehaviour
     [SerializeField] GameObject lane1Cube;
     [SerializeField] GameObject lane2Cube;
     [SerializeField] GameObject lane3Cube;
+
+
     private Vector3[] lanePos;
     int currentLaneIndex;
     int targetIndex;
     public float forceMag;
+
+    //private float timer = 0.0f;
 
     public anim an;
 
@@ -36,7 +41,7 @@ public class VoiceInput : MonoBehaviour
         keyActs.Add("jump", Jump);
         keyActs.Add("write", Right);
         keyActs.Add("right", Right);
-        keyActs.Add("crawl", Slide);
+        //keyActs.Add("crawl", Slide);
         keyActs.Add("center", Center);
 
 
@@ -63,7 +68,8 @@ public class VoiceInput : MonoBehaviour
     {
 
         recognizer.OnPhraseRecognized += OnKeywordsRecognized;
-        
+
+
     }
 
     void Center()
@@ -75,36 +81,42 @@ public class VoiceInput : MonoBehaviour
 
         var step = 500f * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, lanePos[targetIndex], step);
+
+        //transform.Rotate(0, 270, 0);
     }
-    void Left()
+void Left()
     {
         if (currentLaneIndex != 0)
         {
-            targetIndex = currentLaneIndex - 2;
+            targetIndex = 0;
             Debug.Log(lanePos[0]);
         }
 
-        
+
         currentLaneIndex = targetIndex;
 
         var step = 500f * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, lanePos[targetIndex], step);
+
+        //transform.Rotate(0, 90, 0);
     }
 
-    void Right()
+    void Right()    
     {
 
         if (currentLaneIndex != 2)
         {
-            targetIndex = currentLaneIndex + 2;
+            targetIndex = 2;
             Debug.Log(lanePos[2]);
         }
 
-        
+
         currentLaneIndex = targetIndex;
 
         var step = 500f * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, lanePos[targetIndex], step);
+
+        //transform.Rotate(0, -90, 0);
     }
 
     public void Jump() 
@@ -118,12 +130,12 @@ public class VoiceInput : MonoBehaviour
 
     }
 
-    public void Slide()    
-    {
-        an.slide();
-        Debug.Log("crawling");
-        StartCoroutine(Example());
-    }
+    //public void Slide()    
+    //{
+    //    an.slide();
+    //    Debug.Log("crawling");
+    //    StartCoroutine(Example());
+    //}
 
     void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
     {
@@ -132,8 +144,9 @@ public class VoiceInput : MonoBehaviour
     }
     IEnumerator Example()
     {
-        yield return new WaitForSecondsRealtime(2);
-        Debug.Log("Wait");
-        an.running();
+        yield return new WaitForSecondsRealtime(2.75f);
+        //Debug.Log("Wait");
+        an.Running();
     }
+    
 }

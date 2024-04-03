@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class obstacles : MonoBehaviour
 {
     public GameObject player;
     public Rigidbody rb;
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "barrier") // if the tag of the gameobject is player the pickup gets removed
+        if (other.gameObject.tag == "env")
+            SceneManager.LoadScene("loadingscene");
+
+        if (other.gameObject.tag == "gems")
         {
-            Destroy(gameObject);
+            rb.isKinematic = false;
+            other.gameObject.SetActive(false);
         }
     }
 }

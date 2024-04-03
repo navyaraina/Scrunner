@@ -15,21 +15,23 @@ public class anim : MonoBehaviour
         animator.SetBool("Running", true);
         animator.SetBool("Jump", false);
         animator.SetBool("Crawl", false);
-
+        animator.SetBool("Idle",false);
     }
-    public void running()
+    public void Running()
     {
         animator.SetBool("Running", true);
         animator.SetBool("Jump", false);
         animator.SetBool("Crawl", false);
+        animator.SetBool("Idle", false);
     }
     public void jump()
     {
         animator.SetBool("Jump", true);
     }
-    public void slide()
-    {
-        animator.SetBool("Crawl", true);
+    //public void slide()
+    //{
+    //    animator.SetBool("Crawl", true);
 
-    }
+    //}
+
 }
